@@ -12,3 +12,18 @@ import de.syntax_institut.codingchallenges04_07.data.model.ProductWithRating
 import de.syntax_institut.codingchallenges04_07.data.model.Rating
 import kotlinx.coroutines.flow.Flow
 
+@Dao
+interface RatingsDAO {
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(rating: Rating)
+
+    @Query("SELECT * from ratings ORDER BY id ASC")
+    fun getAllItems(): Flow<List<Rating>>
+
+    @Delete
+    suspend fun delete(rating: Rating)
+
+    @Update
+    suspend fun update(rating: Rating)
+}

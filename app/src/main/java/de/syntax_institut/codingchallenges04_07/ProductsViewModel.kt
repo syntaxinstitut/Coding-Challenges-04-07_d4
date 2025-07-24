@@ -12,13 +12,19 @@ import kotlinx.coroutines.launch
 
 class ProductsViewModel(app: Application) : AndroidViewModel(app) {
     private val productsDao = ProductsDatabase.getDatabase(app).productsDao()
+    private val ratingsDao = ProductsDatabase.getDatabase(app).ratingsDao()
+
     val products = productsDao.getAllItems().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         emptyList()
     )
 
-
+    val productsWithRatings = productsDao.getProductWithRating().stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyList()
+    )
 
     init {
         viewModelScope.launch {

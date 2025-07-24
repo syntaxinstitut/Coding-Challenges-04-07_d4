@@ -20,6 +20,10 @@ interface ProductsDao {
     @Query("SELECT * from myproducts ORDER BY productId ASC")
     fun getAllItems(): Flow<List<Product>>
 
+    @Transaction
+    @Query("SELECT * FROM myproducts")
+    fun getProductWithRating(): Flow<List<ProductWithRating>>
+
     @Delete
     suspend fun delete(product: Product)
 

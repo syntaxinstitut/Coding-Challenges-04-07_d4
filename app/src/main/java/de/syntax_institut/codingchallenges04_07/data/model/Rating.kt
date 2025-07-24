@@ -8,7 +8,7 @@ import java.util.UUID
 data class Rating(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
-
+    val productId: String,
     val username: String,
     val rating: Int
 )
