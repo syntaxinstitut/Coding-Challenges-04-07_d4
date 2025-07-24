@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProductsViewModel(app: Application) : AndroidViewModel(app) {
-    private val dao = ProductsDatabase.getDatabase(app).productsDao()
-    val products = dao.getAllItems().stateIn(
+    private val productsDao = ProductsDatabase.getDatabase(app).productsDao()
+    val products = productsDao.getAllItems().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         emptyList()
@@ -22,7 +22,7 @@ class ProductsViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch {
-            dao.getAllItems().collect { productList ->
+            productsDao.getAllItems().collect { productList ->
                 if (productList.isEmpty()) {
                     prepopulate()
                 }
@@ -47,7 +47,7 @@ class ProductsViewModel(app: Application) : AndroidViewModel(app) {
         )
 
         sampleProducts.forEach {
-            dao.insert(it)
+            productsDao.insert(it)
             ratingsDao.insert(
                 Rating(
                     productId = it.productId,
@@ -67,7 +67,7 @@ class ProductsViewModel(app: Application) : AndroidViewModel(app) {
 
     fun add(name: String) = viewModelScope.launch {
         if (name.isNotBlank()) {
-            dao.insert(Product(name = name, price = 1.0))
+            productsDao.insert(Product(name = name, price = 1.0))
         }
     }
 }
